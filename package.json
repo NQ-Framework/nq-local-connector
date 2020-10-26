@@ -45,5 +45,8 @@
     "*.{js,ts,tsx}": [
       "eslint --fix"
     ]
+  },
+  "dependencies": {
+    "eventsource": "^1.0.7"
   }
 }
