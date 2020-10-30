@@ -1,14 +1,21 @@
-import * as eventSource from 'eventsource';
-
-// console.clear();
-
-const token = 'test token goes here';
-const sse = new eventSource('https://server.nqframework.com/v1/actions/receive?token=' + token);
-// const sse = new eventSource('http://localhost:3000/v1/actions/receive?token=' + token);
-sse.addEventListener('message', (event) => {
-    console.log('data ', event);
+import * as dotenv from 'dotenv';
+import * as io from 'socket.io-client';
+import { ConnectionPool, Request } from 'mssql';
+dotenv.config();
+const pool = new ConnectionPool(process.env.CONNECTION_STRING);
+const token = process.env.FB_TOKEN;
+const socket: SocketIOClient.Socket = io(`${process.env.SERVER_URL}`, { query: { token } });
+console.log('connecting... ', process.env.SERVER_URL);
+socket.on('connect', function () {
+    console.log('Connected to server!');
 });
-// sse.onmessage = (event) => {
-//     console.log('data ',event);
-// }
-console.log('started up');
+socket.on('data-request', async function (data) {
+    console.log('eo date', data);
+    await pool.connect();
+    const request = new Request(pool);
+    const dbData = await request.query(data);
+    socket.emit('data-response', dbData);
+});
+socket.on('disconnect', function () {
+    console.log('disko nekted');
+});
