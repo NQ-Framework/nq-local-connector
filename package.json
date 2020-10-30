@@ -49,8 +49,10 @@
     ]
   },
   "dependencies": {
+    "@types/firebase": "^3.2.1",
     "dotenv": "^8.2.0",
     "eventsource": "^1.0.7",
+    "firebase": "^8.0.0",
     "mssql": "^6.2.3",
     "socket.io-client": "^2.3.1"
   }
