@@ -2,15 +2,15 @@ module.exports = [
   // Add support for native node modules
   {
     test: /\.node$/,
-    use: 'node-loader',
+    use: "node-loader",
   },
   {
     test: /\.(m?js|node)$/,
     parser: { amd: false },
     use: {
-      loader: '@marshallofsound/webpack-asset-relocator-loader',
+      loader: "@marshallofsound/webpack-asset-relocator-loader",
       options: {
-        outputAssetBase: 'native_modules',
+        outputAssetBase: "native_modules",
       },
     },
   },
@@ -18,10 +18,19 @@ module.exports = [
     test: /\.tsx?$/,
     exclude: /(node_modules|\.webpack)/,
     use: {
-      loader: 'ts-loader',
+      loader: "ts-loader",
       options: {
-        transpileOnly: true
-      }
-    }
+        transpileOnly: true,
+      },
+    },
+  },
+  {
+    test: /\.(jpg|png|svg|ico|icns)$/,
+    loader: "file-loader",
+    options: {
+      name: "[path][name].[ext]",
+      publicPath: "../.", // move up from 'main_window'
+      context: "src", // set relative working folder to src
+    },
   },
 ];
