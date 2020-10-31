@@ -26,10 +26,14 @@ async function bootstrap() {
     });
     socket.on('data-request', async function (data) {
         console.log('eo date', data);
-        await pool.connect();
-        const request = new Request(pool);
-        const dbData = await request.query(data);
-        socket.emit('data-response', dbData);
+        try {
+            await pool.connect();
+            const request = new Request(pool);
+            const dbData = await request.query(data);
+            socket.emit('data-response', dbData);
+        } catch (err) {
+            socket.emit('data-response', { status: ' kitica', poruka: err });
+        }
     });
     socket.on('disconnect', function () {
         console.log('disko nekted');
